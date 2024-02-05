@@ -15,6 +15,7 @@ createApp({
         ],
       },
       isNew: false,
+      pages: {},
     };
   },
   methods: {
@@ -34,7 +35,10 @@ createApp({
       axios
         .get(`${this.apiUrl}/api/${this.apiPath}/admin/products`) // 有分頁
         .then((res) => {
-          this.products = res.data.products;
+          const { products, pagination } = res.data;
+          this.products = products;
+          this.pages = pagination;
+          console.log(res);
         })
         .catch((error) => {
           alert(error.data.message);
