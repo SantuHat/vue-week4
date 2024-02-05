@@ -31,9 +31,10 @@ createApp({
           window.location = "index.html";
         });
     },
-    getData() {
+    // 參數預設值
+    getData(page = 1) {
       axios
-        .get(`${this.apiUrl}/api/${this.apiPath}/admin/products`) // 有分頁
+        .get(`${this.apiUrl}/api/${this.apiPath}/admin/products?page=${page}`) // 有分頁
         .then((res) => {
           const { products, pagination } = res.data;
           this.products = products;
