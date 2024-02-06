@@ -3,6 +3,8 @@ import { createApp } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
 let productModal = null;
 let delProductModal = null;
 
+import pagination from "./pagination.js";
+
 createApp({
   data() {
     return {
@@ -135,5 +137,8 @@ createApp({
         keyboard: false,
       }
     );
+  },
+  components: {
+    pagination,
   },
 }).mount("#app");

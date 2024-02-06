@@ -64,37 +64,7 @@
           </tbody>
         </table>
         <!-- 分頁 -->
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item" :class="{disabled: !pages.has_pre}">
-              <a
-                @click="getData(pages.current_page - 1)"
-                class="page-link"
-                href="#"
-                >Previous</a
-              >
-            </li>
-            <!-- v-for -->
-            <li
-              class="page-item"
-              v-for="page in pages.total_pages"
-              :key="page + 55"
-              :class="{active: page === pages.current_page}"
-            >
-              <a @click="getData(page)" class="page-link" href="#"
-                >{{ page }}</a
-              >
-            </li>
-            <li class="page-item">
-              <a
-                @click="getData(pages.current_page + 1)"
-                class="page-link"
-                href="#"
-                >Next</a
-              >
-            </li>
-          </ul>
-        </nav>
+        <pagination :pages="pages" :get-data="getData"></pagination>
       </div>
       <!-- Modal -->
       <div
@@ -141,22 +111,22 @@
                         v-model="tempProduct.imageUrl[key]"
                         :id="`imageUrl${key}`"
                       />
+                      <img class="img-fluid" :src="img" :alt="img" />
                     </div>
-                    <img class="img-fluid" :src="img" :alt="" />
                   </div>
-                  <div>
+                  <div
+                    v-if="tempProduct.imageUrl.length === 0 || tempProduct.imageUrl[tempProduct.imageUrl.length - 1]"
+                  >
                     <!-- 最後一個有值的情況下 -->
                     <button
-                      v-if="tempProduct.imageUrl.length === 0 || tempProduct.imageUrl[tempProduct.imageUrl.length - 1]"
                       class="btn btn-outline-primary btn-sm d-block w-100"
                       @click="tempProduct.imageUrl.push('')"
                     >
                       新增圖片
                     </button>
                   </div>
-                  <div>
+                  <div v-else>
                     <button
-                      v-else
                       @click="tempProduct.imageUrl.pop('')"
                       class="btn btn-outline-danger btn-sm d-block w-100"
                     >
