@@ -4,6 +4,7 @@ let productModal = null;
 let delProductModal = null;
 
 import pagination from "./pagination.js";
+import ProductModal from "./ProductModal.js";
 
 createApp({
   data() {
@@ -140,5 +141,6 @@ createApp({
   },
   components: {
     pagination,
+    ProductModal,
   },
 }).mount("#app");
