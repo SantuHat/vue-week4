@@ -63,6 +63,7 @@
             </tr>
           </tbody>
         </table>
+        <!-- 分頁 -->
         <nav aria-label="Page navigation example">
           <ul class="pagination">
             <li class="page-item" :class="{disabled: !pages.has_pre}">
@@ -120,34 +121,45 @@
             </div>
             <div class="modal-body">
               <div class="row">
-                <div class="col-sm-4">
+                <div
+                  v-if="Array.isArray(tempProduct.imageUrl)"
+                  class="col-sm-4"
+                >
                   <div class="mb-2">
-                    <div class="mb-3">
-                      <label for="imageUrl" class="form-label"
+                    <div
+                      v-for="(img, key) in tempProduct.imageUrl"
+                      :key="key + 123"
+                      class="mb-3"
+                    >
+                      <label :for="`imageUrl${key}`" class="form-label"
                         >輸入圖片網址</label
                       >
                       <input
                         type="text"
                         class="form-control"
                         placeholder="請輸入圖片連結"
-                        v-model="tempProduct.imageUrl"
+                        v-model="tempProduct.imageUrl[key]"
+                        :id="`imageUrl${key}`"
                       />
                     </div>
-                    <img
-                      class="img-fluid"
-                      :src="tempProduct.imageUrl"
-                      :alt="tempProduct.imageUrl"
-                    />
+                    <img class="img-fluid" :src="img" :alt="" />
                   </div>
                   <div>
+                    <!-- 最後一個有值的情況下 -->
                     <button
+                      v-if="tempProduct.imageUrl.length === 0 || tempProduct.imageUrl[tempProduct.imageUrl.length - 1]"
                       class="btn btn-outline-primary btn-sm d-block w-100"
+                      @click="tempProduct.imageUrl.push('')"
                     >
                       新增圖片
                     </button>
                   </div>
                   <div>
-                    <button class="btn btn-outline-danger btn-sm d-block w-100">
+                    <button
+                      v-else
+                      @click="tempProduct.imageUrl.pop('')"
+                      class="btn btn-outline-danger btn-sm d-block w-100"
+                    >
                       刪除圖片
                     </button>
                   </div>

@@ -60,9 +60,25 @@ createApp({
         });
     },
     editData() {
-      axios.put(
-        `${this.apiUrl}/api/${this.apiPath}/admin/products/${this.tempProduct.id}`
-      );
+      // 新增
+      let api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
+      let method = "post";
+
+      // 修改
+      if (!this.isNew) {
+        api = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
+        method = "put";
+      }
+      axios[method](api, { data: this.tempProduct })
+        .then((res) => {
+          this.getData();
+          productModal.hide();
+          this.tempProduct = {};
+          alert(res.data.message);
+        })
+        .catch((error) => {
+          alert(error.data.message);
+        });
     },
     deleteData() {
       axios
@@ -87,6 +103,9 @@ createApp({
         this.isNew = false;
         this.tempProduct = { ...product };
         productModal.show();
+        if (!Array.isArray(this.tempProduct.imageUrl)) {
+          this.tempProduct.imageUrl = [];
+        }
       } else if (isNew === "delete") {
         delProductModal.show();
       }
