@@ -2,14 +2,14 @@ import { createApp } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
 
 let productModal = null;
 let delProductModal = null;
+const apiUrl = `https://ec-course-api.hexschool.io/v2`;
+const apiPath =  "santu";
 
 import pagination from "./pagination.js";
 
 createApp({
   data() {
     return {
-      apiUrl: `https://ec-course-api.hexschool.io/v2`,
-      apiPath: "santu",
       products: [],
       tempProduct: {
         imageUrl: [
@@ -24,7 +24,7 @@ createApp({
     // 驗證登入
     checkAdmin() {
       axios
-        .post(`${this.apiUrl}/api/user/check`)
+        .post(`${apiUrl}/api/user/check`)
         .then(() => {
           this.getData();
         })
@@ -36,7 +36,7 @@ createApp({
     // 參數預設值
     getData(page = 1) {
       axios
-        .get(`${this.apiUrl}/api/${this.apiPath}/admin/products?page=${page}`) // 有分頁
+        .get(`${apiUrl}/api/${apiPath}/admin/products?page=${page}`) // 有分頁
         .then((res) => {
           const { products, pagination } = res.data;
           this.products = products;
@@ -49,7 +49,7 @@ createApp({
     },
     postData() {
       axios
-        .post(`${this.apiUrl}/api/${this.apiPath}/admin/product`, {
+        .post(`${apiUrl}/api/${apiPath}/admin/product`, {
           data: this.tempProduct,
         })
         .then((res) => {
@@ -63,12 +63,12 @@ createApp({
     },
     editData() {
       // 新增
-      let api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
+      let api = `${apiUrl}/api/${apiPath}/admin/product`;
       let method = "post";
 
       // 修改
       if (!this.isNew) {
-        api = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
+        api = `${apiUrl}/api/${apiPath}/admin/product/${this.tempProduct.id}`;
         method = "put";
       }
       axios[method](api, { data: this.tempProduct })
@@ -85,13 +85,15 @@ createApp({
     deleteData() {
       axios
         .delete(
-          `${this.apiUrl}/api/${this.apiPath}/admin/products/${this.products.id}`
+          `${apiUrl}/api/${apiPath}/admin/product/${this.tempProduct.id}`
         )
         .then((res) => {
           alert("刪除成功");
+          delProductModal.hide();
+          this.getData();
         })
         .catch((error) => {
-          alert(error.response);
+          alert(error.data.message);
         });
     },
     openModal(isNew, product) {
@@ -109,6 +111,7 @@ createApp({
           this.tempProduct.imageUrl = [];
         }
       } else if (isNew === "delete") {
+        this.tempProduct = { ...product }
         delProductModal.show();
       }
     },
