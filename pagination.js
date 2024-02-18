@@ -8,7 +8,7 @@ export default {
   <ul class="pagination">
     <li class="page-item" :class="{disabled: !pages.has_pre}">
       <a
-        @click="getData(pages.current_page - 1)"
+        @click.prevent="getData(pages.current_page - 1)"
         class="page-link"
         href="#"
         >Previous</a
@@ -21,13 +21,13 @@ export default {
       :key="page + 55"
       :class="{active: page === pages.current_page}"
     >
-      <a @click="getData(page)" class="page-link" href="#"
+      <a @click.prevent="getData(page)" class="page-link" href="#"
         >{{ page }}</a
       >
     </li>
-    <li class="page-item">
+    <li class="page-item" :class="{disabled: pages.current_page === pages.total_pages}">
       <a
-        @click="getData(pages.current_page + 1)"
+        @click.prevent="getData(pages.current_page + 1)"
         class="page-link"
         href="#"
         >Next</a
